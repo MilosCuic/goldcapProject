@@ -5,16 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Proxy;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,10 +37,9 @@ public class GoldcapUser implements UserDetails {
     @NotEmpty(message = "username field is required")
     @Column(nullable = false , unique = true)
     private String username;
-    @Column(nullable = false)
+    @Column(nullable = false , length = 255)
     @NotNull(message = "password cant be null")
     @NotEmpty
-    @Size(min = 6 , max = 30)
     private String password;
 
 
@@ -64,32 +62,37 @@ public class GoldcapUser implements UserDetails {
     //TODO add roles
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        SimpleGrantedAuthority role1 = new SimpleGrantedAuthority("ROLE_USER");
-        SimpleGrantedAuthority role2 = new SimpleGrantedAuthority("ROLE_ADMIN");
+//        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+//        SimpleGrantedAuthority role1 = new SimpleGrantedAuthority("ROLE_USER");
+//        SimpleGrantedAuthority role2 = new SimpleGrantedAuthority("ROLE_ADMIN");
+//
+//        authorities.add(role1);
+//        authorities.add(role2);
 
-        authorities.add(role1);
-        authorities.add(role2);
-
-        return authorities;
+//        return authorities;
+        return null;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

@@ -4,15 +4,14 @@ import com.goldcap.model.GoldcapUser;
 import com.goldcap.service.GoldcapUserService;
 import com.goldcap.web.dto.RegisterGoldcapUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class UserDTOtoUser implements Converter<RegisterGoldcapUserDTO, GoldcapUser> {
+public class RegisterUserDTOtoUser implements Converter<RegisterGoldcapUserDTO, GoldcapUser> {
 
     @Autowired
     private GoldcapUserService goldcapUserService;
@@ -20,16 +19,8 @@ public class UserDTOtoUser implements Converter<RegisterGoldcapUserDTO, GoldcapU
     @Override
     public GoldcapUser convert(RegisterGoldcapUserDTO source) {
 
-        GoldcapUser goldcapUser = null;
+        GoldcapUser goldcapUser = new GoldcapUser();
 
-        if (source.getId() != null) {
-            goldcapUser = goldcapUserService.getById(source.getId());
-        }else{
-            goldcapUser = new GoldcapUser();
-        }
-
-        //to-do set orders
-        //validate
         goldcapUser.setFirstName(source.getFirstName());
         goldcapUser.setLastName(source.getLastName());
         goldcapUser.setUsername(source.getUsername());

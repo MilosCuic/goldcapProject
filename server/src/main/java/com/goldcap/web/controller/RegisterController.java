@@ -1,9 +1,10 @@
 package com.goldcap.web.controller;
 
-import com.goldcap.converter.UserDTOtoUser;
+import com.goldcap.converter.RegisterUserDTOtoUser;
 import com.goldcap.model.GoldcapUser;
 import com.goldcap.service.GoldcapUserService;
 import com.goldcap.service.impl.MapValidationErrorService;
+import com.goldcap.validator.GoldcapUserValidator;
 import com.goldcap.web.dto.RegisterGoldcapUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,12 +27,16 @@ public class RegisterController {
     private GoldcapUserService goldcapUserService;
 
     @Autowired
-    private UserDTOtoUser dtoToUser;
+    private RegisterUserDTOtoUser dtoToUser;
+
+    @Autowired
+    private GoldcapUserValidator userValidator;
 
     @PostMapping
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterGoldcapUserDTO userDTO, BindingResult result){
 
         //TODO make sure password and confirm password match
+        userValidator.validate(userDTO , result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.validateResult(result);
         if (errorMap != null) {

@@ -1,6 +1,6 @@
 package com.goldcap.service.impl;
 
-import com.goldcap.converter.UserDTOtoUser;
+import com.goldcap.converter.RegisterUserDTOtoUser;
 import com.goldcap.exception.EmailAlreadyTakenException;
 import com.goldcap.exception.UsernameAlreadyTakenException;
 import com.goldcap.model.GoldcapUser;
@@ -24,7 +24,7 @@ public class GoldcapUserServiceImpl implements GoldcapUserService {
     private GoldcapUserRepository goldcapUserRepository;
 
     @Autowired
-    private UserDTOtoUser dtOtoUser;
+    private RegisterUserDTOtoUser dtOtoUser;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -40,24 +40,19 @@ public class GoldcapUserServiceImpl implements GoldcapUserService {
 
     @Override
     public GoldcapUser save(RegisterGoldcapUserDTO userDTO) {
-
-
-
-            //email has to be unique
+        try {
             if (goldcapUserRepository.findByEmail(userDTO.getEmail()) != null) {
                 throw new EmailAlreadyTakenException("There is already user with that email");
             }
-            //username has to be unique
             if (goldcapUserRepository.findGoldcapUserByUsername(userDTO.getUsername()) != null){
                 throw new UsernameAlreadyTakenException("Username already taken");
             }
-            //make sure that password and confirm password are equal
-            //custom exception
 
             GoldcapUser goldcapUser = dtOtoUser.convert(userDTO);
 
+            System.out.println("kurac");
             System.out.println(goldcapUser);
-        try {
+
             assert goldcapUser != null;
             goldcapUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             return goldcapUserRepository.save(goldcapUser);

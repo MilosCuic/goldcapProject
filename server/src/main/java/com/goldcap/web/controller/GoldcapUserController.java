@@ -1,14 +1,17 @@
 package com.goldcap.web.controller;
 
-import com.goldcap.converter.UserToUserDTO;
+import com.goldcap.converter.UserToGoldcapUserDTO;
 import com.goldcap.model.GoldcapUser;
+import com.goldcap.security.TokenProvider;
 import com.goldcap.service.GoldcapUserService;
+import com.goldcap.web.dto.GoldcapUserDTO;
 import com.goldcap.web.dto.RegisterGoldcapUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +25,16 @@ public class GoldcapUserController {
     private GoldcapUserService goldcapUserService;
 
     @Autowired
-    private UserToUserDTO toUserDTO;
+    private UserToGoldcapUserDTO toUserDTO;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @PostMapping
-    public ResponseEntity<RegisterGoldcapUserDTO> addUser(@RequestBody RegisterGoldcapUserDTO userDTO){
+    public ResponseEntity<GoldcapUserDTO> addUser(@RequestBody RegisterGoldcapUserDTO userDTO){
 
         if (userDTO.getId() != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -40,7 +48,7 @@ public class GoldcapUserController {
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<RegisterGoldcapUserDTO> editUser(@PathVariable Long id, @RequestBody RegisterGoldcapUserDTO userDTO){
+    public ResponseEntity<GoldcapUserDTO> editUser(@PathVariable Long id, @RequestBody RegisterGoldcapUserDTO userDTO){
 
         if (userDTO.getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -58,7 +66,7 @@ public class GoldcapUserController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RegisterGoldcapUserDTO> getUserById(@PathVariable Long id){
+    public ResponseEntity<GoldcapUserDTO> getUserById(@PathVariable Long id){
 
         if (goldcapUserService.getById(id) == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -78,7 +86,7 @@ public class GoldcapUserController {
     }
 
     @GetMapping(value = "/{pageNum}/{pageSize}")
-    public ResponseEntity<List<RegisterGoldcapUserDTO>> getUserById
+    public ResponseEntity<List<GoldcapUserDTO>> getUserById
             (@PathVariable int pageNum,
              @PathVariable int pageSize,
              @RequestParam(required=false , defaultValue = "id") String field,
