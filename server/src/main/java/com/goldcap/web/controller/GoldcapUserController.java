@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -86,11 +88,14 @@ public class GoldcapUserController {
     }
 
     @GetMapping(value = "/{pageNum}/{pageSize}")
+    @RolesAllowed({ "ROLE_ADMIN", "ROLE_SUPER_ADMIN" })
     public ResponseEntity<List<GoldcapUserDTO>> getUserById
             (@PathVariable int pageNum,
              @PathVariable int pageSize,
              @RequestParam(required=false , defaultValue = "id") String field,
-             @RequestParam(required=false , defaultValue = "ASC") String direction){
+             @RequestParam(required=false , defaultValue = "ASC") String direction,
+             Principal principal){
+
 
         Page<GoldcapUser> userPage = null;
 

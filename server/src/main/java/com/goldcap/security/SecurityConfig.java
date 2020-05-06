@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.goldcap.util.Constants.SIGN_IN_URL;
 import static com.goldcap.util.Constants.SIGN_UP_URLS;
@@ -58,7 +59,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
        http.cors().and().csrf().disable()
-//               .addFilterBefore(jwtAuthenticationFilter() , UsernamePasswordAuthenticationFilter.class)
+               .addFilterBefore(jwtAuthenticationFilter() , UsernamePasswordAuthenticationFilter.class)
                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                .sessionManagement()
                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -78,7 +79,6 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                ).permitAll()
                .antMatchers(SIGN_UP_URLS).permitAll()
                .antMatchers(SIGN_IN_URL).permitAll()
-               .anyRequest().permitAll();
-
+               .anyRequest().authenticated();
     }
 }

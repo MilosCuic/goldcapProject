@@ -38,4 +38,11 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity(response , HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleForbiddenException(ForbiddenException ex, WebRequest request){
+        CustomMessageResponse response = new CustomMessageResponse(ex.getMessage());
+        return new ResponseEntity(response , HttpStatus.FORBIDDEN);
+    }
+
+
 }

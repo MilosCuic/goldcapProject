@@ -5,6 +5,7 @@ import com.goldcap.model.GoldcapUser;
 import com.goldcap.service.impl.GoldcapUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
@@ -15,6 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.goldcap.util.Constants.HEADER_STRING;
 import static com.goldcap.util.Constants.TOKEN_PREFIX;
@@ -39,10 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             GoldcapUser userDetails = userDetailsService.loadGoldcapUserById(userId);
 
-            System.out.println(userDetails);
-            //third params is list of roles
+            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
+            authorities.add(authority);
+
             UsernamePasswordAuthenticationToken auth  = new UsernamePasswordAuthenticationToken(
-                    userDetails , null , null);
+                    userDetails , null , authorities);
 
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
