@@ -1,9 +1,7 @@
 package com.goldcap.converter;
 
 import com.goldcap.model.GoldcapUser;
-import com.goldcap.service.GoldcapUserService;
 import com.goldcap.web.dto.RegisterGoldcapUserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +10,6 @@ import java.util.List;
 
 @Component
 public class RegisterUserDTOtoUser implements Converter<RegisterGoldcapUserDTO, GoldcapUser> {
-
-    @Autowired
-    private GoldcapUserService goldcapUserService;
 
     @Override
     public GoldcapUser convert(RegisterGoldcapUserDTO source) {

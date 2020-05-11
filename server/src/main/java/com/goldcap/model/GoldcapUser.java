@@ -22,7 +22,6 @@ public class GoldcapUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
     @Column
     private String firstName;
@@ -41,19 +40,19 @@ public class GoldcapUser implements UserDetails {
     @NotNull(message = "password cant be null")
     @NotEmpty
     private String password;
-    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY , mappedBy = "goldcapUser" , orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY , mappedBy = "goldcapUser")
     @JsonIgnore
     private List<Order> orders;
 
-    public void addOrder(Order order){
-        order.setGoldcapUser(this);
-        this.orders.add(order);
+    @ManyToMany(cascade = CascadeType.ALL  , fetch = FetchType.EAGER)
+    private List<Role> roles;
+
+    public void addRole(Role role){
+        if(!roles.contains(role)){
+            roles.add(role);
+        }
     }
 
-    //
-//    public void addAuthority(String authority){
-//        this.authorities.add
-//    }
     /*
     *
     UserDetails interface methods
@@ -64,14 +63,6 @@ public class GoldcapUser implements UserDetails {
     //TODO add roles
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-//        SimpleGrantedAuthority role1 = new SimpleGrantedAuthority("ROLE_USER");
-//        SimpleGrantedAuthority role2 = new SimpleGrantedAuthority("ROLE_ADMIN");
-//
-//        authorities.add(role1);
-//        authorities.add(role2);
-
-//        return authorities;
         return null;
     }
 

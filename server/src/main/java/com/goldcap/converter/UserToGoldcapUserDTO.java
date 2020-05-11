@@ -24,6 +24,9 @@ public class UserToGoldcapUserDTO implements Converter<GoldcapUser , GoldcapUser
         goldcapUserDTO.setEmail(source.getEmail());
         goldcapUserDTO.setUsername(source.getUsername());
 
+        //TODO REMOVE ()
+//        goldcapUserDTO.setRoles(source.getRoles());
+
         return goldcapUserDTO;
     }
 

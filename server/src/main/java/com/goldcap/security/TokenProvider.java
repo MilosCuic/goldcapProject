@@ -2,6 +2,7 @@ package com.goldcap.security;
 
 
 import com.goldcap.model.GoldcapUser;
+import com.goldcap.model.Role;
 import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -10,8 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.goldcap.util.Constants.SECRET;
-import static com.goldcap.util.Constants.TOKEN_EXPIRATION_TIME;
+import static com.goldcap.util.Constants.*;
 
 @Component
 public class TokenProvider {
@@ -25,14 +25,23 @@ public class TokenProvider {
 
         System.out.println("Setting expiration date is ms.....");
         System.out.println(expiryDate);
+        boolean isAdmin = false;
 
         String goldcapUserId = Long.toString(user.getId());
+        for (Role role : user.getRoles()){
+            if (role.getName().equals(ROLE_SUPER_ADMIN) ||
+                role.getName().equals(ROLE_ADMIN)) {
+                isAdmin = true;
+                break;
+            }
+        }
 
         //information that we put in token
         //maybe put roles in token
         Map<String , Object> tokenClaims = new HashMap<>();
         tokenClaims.put("id" , Long.toString(user.getId()));
         tokenClaims.put("username" , user.getUsername());
+        tokenClaims.put("isAdmin" , isAdmin);
 
        return Jwts.builder()
                .setSubject(goldcapUserId)

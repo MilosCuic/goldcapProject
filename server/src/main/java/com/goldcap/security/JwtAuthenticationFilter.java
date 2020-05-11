@@ -2,6 +2,7 @@ package com.goldcap.security;
 
 
 import com.goldcap.model.GoldcapUser;
+import com.goldcap.model.Role;
 import com.goldcap.service.impl.GoldcapUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,11 +45,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
-            authorities.add(authority);
+
+            if (userDetails.getRoles().size() > 0){
+                for (Role role : userDetails.getRoles()) {
+                    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
+                    authorities.add(authority);
+                }
+            }else {
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority("GUEST");
+                authorities.add(authority);
+            }
+
 
             UsernamePasswordAuthenticationToken auth  = new UsernamePasswordAuthenticationToken(
-                    userDetails , null , null);
+                    userDetails , null , authorities);
 
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
