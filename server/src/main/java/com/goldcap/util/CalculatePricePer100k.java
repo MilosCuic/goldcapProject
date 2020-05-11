@@ -1,6 +1,5 @@
 package com.goldcap.util;
 
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,4 +14,5 @@ public class CalculatePricePer100k {
             throw  new NumberFormatException("Gold amount must be at least 100.000");
         }
     }
+
 }

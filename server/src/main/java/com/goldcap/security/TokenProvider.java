@@ -23,6 +23,9 @@ public class TokenProvider {
         Date startDate = new Date(System.currentTimeMillis());
         Date expiryDate = new Date(startDate.getTime() + TOKEN_EXPIRATION_TIME);
 
+        System.out.println("Setting expiration date is ms.....");
+        System.out.println(expiryDate);
+
         String goldcapUserId = Long.toString(user.getId());
 
         //information that we put in token

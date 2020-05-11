@@ -1,12 +1,17 @@
 package com.goldcap.validator;
 
+import com.goldcap.service.GoldcapUserService;
 import com.goldcap.web.dto.RegisterGoldcapUserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
 public class GoldcapUserValidator implements Validator {
+
+    @Autowired
+    private GoldcapUserService goldcapUserService;
 
     @Override
     public boolean supports(Class<?> theClass) {
@@ -30,6 +35,15 @@ public class GoldcapUserValidator implements Validator {
     public void validate(Object target, Errors errors) {
 
         RegisterGoldcapUserDTO user = (RegisterGoldcapUserDTO) target;
+
+        if (goldcapUserService.findByEmail(user.getEmail()) != null) {
+            errors.rejectValue("email" , "Already taken" ,
+                    "Email already taken");
+        }
+        if (goldcapUserService.findByUsername(user.getUsername()) != null) {
+            errors.rejectValue("username" , "Already taken" ,
+                    "Username already taken");
+        }
 
         if (!user.getPassword().matches(passwordPattern)){
             errors.rejectValue("password" , "Match" , "Password needs   to contain " +

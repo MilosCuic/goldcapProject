@@ -10,15 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/register")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class RegisterController {
 
     @Autowired
@@ -35,13 +33,12 @@ public class RegisterController {
     @PostMapping
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterGoldcapUserDTO userDTO, BindingResult result){
 
-        //TODO make sure password and confirm password match
-        userValidator.validate(userDTO , result);
-
         ResponseEntity<?> errorMap = mapValidationErrorService.validateResult(result);
         if (errorMap != null) {
             return errorMap;
         }
+
+        userValidator.validate(userDTO , result);
 
         GoldcapUser newUser = goldcapUserService.save(userDTO);
 

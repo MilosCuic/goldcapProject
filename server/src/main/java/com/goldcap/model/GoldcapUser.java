@@ -11,7 +11,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +22,7 @@ public class GoldcapUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     @Column
     private String firstName;
@@ -41,17 +41,19 @@ public class GoldcapUser implements UserDetails {
     @NotNull(message = "password cant be null")
     @NotEmpty
     private String password;
-
-
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY , mappedBy = "goldcapUser" , orphanRemoval = true)
     @JsonIgnore
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders;
 
     public void addOrder(Order order){
         order.setGoldcapUser(this);
         this.orders.add(order);
     }
 
+    //
+//    public void addAuthority(String authority){
+//        this.authorities.add
+//    }
     /*
     *
     UserDetails interface methods

@@ -11,15 +11,16 @@ public class Constants {
     public static final String TOKEN_PREFIX = "Bearer ";
     //also standard value
     public static final String HEADER_STRING = "Authorization";
-    public static final long TOKEN_EXPIRATION_TIME = 120_000; //2min
+    public static final long TOKEN_EXPIRATION_TIME = 600_000_000; // 60k = 1min
 
 
 
     //roles
     public static final String ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
-    public static final String CUSTOMER = "CUSTOMER";
-    public static final String SELLER = "SELLER";
+    public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
+    public static final String ROLE_SELLER = "ROLE_SELLER";
+    public static final String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
 
 
     public static final String PVP = "PvP";

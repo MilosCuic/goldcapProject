@@ -2,7 +2,6 @@ package com.goldcap.web.controller;
 
 import com.goldcap.converter.OrderToOrderDTO;
 import com.goldcap.model.Order;
-import com.goldcap.model.Realm;
 import com.goldcap.service.OrderService;
 import com.goldcap.service.impl.MapValidationErrorService;
 import com.goldcap.web.dto.OrderDTO;
@@ -17,13 +16,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
+import static com.goldcap.util.Constants.*;
+
 @RestController
 @RequestMapping("/orders")
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
+@RolesAllowed({ ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_SELLER})
 public class OrderController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -110,13 +113,14 @@ public class OrderController {
             @RequestParam(required=false) Double goldAmount,
             @RequestParam(required=false) Double price,
             @RequestParam(required=false , defaultValue = "id") String field,
-            @RequestParam(required=false , defaultValue = "ASC") String direction
+            @RequestParam(required=false , defaultValue = "ASC") String direction,
+            Principal principal
             ){
 
         Page<Order> orderPage = null;
 
         //TODO staviti principal logovanog umesto username
-        orderPage = orderService.searchOrders(buyerName, realmName, goldAmount  , price , null,  pageNum , pageSize , field , direction);
+        orderPage = orderService.searchOrders(buyerName, realmName, goldAmount  , price , principal.getName() ,  pageNum , pageSize , field , direction);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("totalPages", Integer.toString(orderPage.getTotalPages()) );

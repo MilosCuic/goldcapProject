@@ -1,7 +1,7 @@
 package com.goldcap.service.impl;
 
-import com.goldcap.converter.SaveOrderDTOtoOrder;
 import com.goldcap.converter.OrderToSaveOrderDTO;
+import com.goldcap.converter.SaveOrderDTOtoOrder;
 import com.goldcap.exception.EntityIdException;
 import com.goldcap.model.Order;
 import com.goldcap.repository.GoldcapUserRepository;
@@ -47,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
 //        }
 
         Order order = toOrder.convert(saveOrderDTO);
+
 
         assert order != null;
         return orderRepository.save(order);

@@ -1,8 +1,6 @@
 package com.goldcap.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Proxy;
@@ -41,6 +39,7 @@ public class Order {
 
     @Column
     private Double pricePer100k;
+
 
     @Column
     @NotBlank
