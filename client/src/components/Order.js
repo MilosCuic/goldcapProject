@@ -38,6 +38,7 @@ class Order extends Component {
     componentWillReceiveProps(nextProps, nextContext) {
         console.log('next Props' , nextProps)
         if (nextProps.errors && Object.keys(nextProps.errors).length > 0) {
+            console.log(Object.keys(nextProps.errors));
             this.setState({
                 errors: nextProps.errors
             })
@@ -55,16 +56,12 @@ class Order extends Component {
     _submitForm = (e) => {
         e.preventDefault();
 
-        if (this.state.errors !== null){
-        return null;
-        }
-
         const order = {
             buyerName: this.state.buyerName,
             goldAmount: this.state.goldAmount,
             price: this.state.price,
             realmId: this.state.realmId,
-            goldcapUserId: 1
+            goldcapUserId: this.props.security.user.id
         }
         console.log('saved order' , order)
         this.props.createOrder(order , this.props.history)
@@ -74,7 +71,8 @@ class Order extends Component {
             goldAmount: '',
             price: '',
             realmId: '',
-            showModal: false
+            showModal: false,
+            errors: {}
         })
 
 
@@ -211,6 +209,9 @@ class Order extends Component {
                                         </div>
 
                                         <input type="submit" className="btn btn-primary btn-block mt-4"/>
+                                        <Button className="btn btn-danger btn-block mt-4" onClick={this.handleClose}>
+                                            Cancel
+                                        </Button>
                                     </form>
                                 </div>
                             </div>
@@ -232,13 +233,15 @@ Order.propTypes = {
     getOrders : PropTypes.func.isRequired,
     createOrder: PropTypes.func.isRequired,
     getRealms: PropTypes.func.isRequired,
+    security: PropTypes.object.isRequired
     // deleteOrder: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     orders: state.orders,
     errors: state.errors,
-    realms: state.realms
+    realms: state.realms,
+    security: state.security
 })
 
 // const mapDispatchToProps = (dispatch) => {

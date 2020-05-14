@@ -30,7 +30,11 @@ export const getOrders = () => {
             res => dispatch({
                 type: GET_ORDERS,
                 payload: res.data
-            })
+            }),
+            err => dispatch({
+            type: GET_ERRORS,
+            payload : err.response.data
+        })
         )
     }
 }
