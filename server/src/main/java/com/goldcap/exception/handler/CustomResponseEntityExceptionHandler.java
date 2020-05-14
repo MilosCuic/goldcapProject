@@ -28,18 +28,24 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
     @ExceptionHandler
     public final ResponseEntity<Object> handleUsernameAlreadyTakenException(UsernameAlreadyTakenException ex, WebRequest request){
-        CustomMessageResponse response = new CustomMessageResponse(ex.getMessage());
+        CustomMessageResponse response = new CustomMessageResponse("" , ex.getMessage());
         return new ResponseEntity(response , HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public final ResponseEntity<Object> handleEmailAlreadyTakenException(EmailAlreadyTakenException ex, WebRequest request){
-        CustomMessageResponse response = new CustomMessageResponse(ex.getMessage());
+        CustomMessageResponse response = new CustomMessageResponse(ex.getMessage(), "");
         return new ResponseEntity(response , HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public final ResponseEntity<Object> handleForbiddenException(ForbiddenException ex, WebRequest request){
+        CustomMessageResponse response = new CustomMessageResponse(ex.getMessage());
+        return new ResponseEntity(response , HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleRoleAlreadyExists(RoleAlreadyExistsException ex, WebRequest request){
         CustomMessageResponse response = new CustomMessageResponse(ex.getMessage());
         return new ResponseEntity(response , HttpStatus.FORBIDDEN);
     }

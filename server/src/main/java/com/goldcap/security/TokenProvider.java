@@ -3,7 +3,9 @@ package com.goldcap.security;
 
 import com.goldcap.model.GoldcapUser;
 import com.goldcap.model.Role;
+import com.goldcap.service.impl.GoldcapUserDetailsService;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,9 @@ import static com.goldcap.util.Constants.*;
 @Component
 public class TokenProvider {
 
+    @Autowired
+    private GoldcapUserDetailsService userDetailsService;
+
     //generate the token
     public String generateToken(Authentication authentication){
 
@@ -26,6 +31,7 @@ public class TokenProvider {
         System.out.println("Setting expiration date is ms.....");
         System.out.println(expiryDate);
         boolean isAdmin = false;
+        boolean isVerified = userDetailsService.loadGoldcapUserById(user.getId()).isVerified();
 
         String goldcapUserId = Long.toString(user.getId());
         for (Role role : user.getRoles()){
@@ -42,6 +48,7 @@ public class TokenProvider {
         tokenClaims.put("id" , Long.toString(user.getId()));
         tokenClaims.put("username" , user.getUsername());
         tokenClaims.put("isAdmin" , isAdmin);
+        tokenClaims.put("isVerified" , isVerified);
 
        return Jwts.builder()
                .setSubject(goldcapUserId)

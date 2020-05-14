@@ -45,6 +45,7 @@ public class GoldcapUserController {
     }
 
     @PatchMapping(value = "/{id}")
+    @RolesAllowed("ROLE_SUPER_ADMIN")
     public ResponseEntity<GoldcapUserDTO> editUser(@PathVariable Long id, @RequestBody RegisterGoldcapUserDTO userDTO){
 
         if (userDTO.getId() == null) {
@@ -77,6 +78,7 @@ public class GoldcapUserController {
     }
 
     @DeleteMapping(value = "/{id}")
+    @RolesAllowed("ROLE_SUPER_ADMIN")
     public ResponseEntity<?> deleteUser(@PathVariable Long id){
         goldcapUserService.deleteById(id);
         return new ResponseEntity<>("User with id: " + id + " successfully deleted!" , HttpStatus.OK);

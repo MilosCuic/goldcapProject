@@ -2,7 +2,9 @@ package com.goldcap.service.impl;
 
 import com.goldcap.converter.RegisterUserDTOtoUser;
 import com.goldcap.model.GoldcapUser;
+import com.goldcap.model.VerificationToken;
 import com.goldcap.repository.GoldcapUserRepository;
+import com.goldcap.repository.VerificationTokenRepository;
 import com.goldcap.service.GoldcapUserService;
 import com.goldcap.web.dto.RegisterGoldcapUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class GoldcapUserServiceImpl implements GoldcapUserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private VerificationTokenRepository tokenRepository;
 
     public GoldcapUserServiceImpl(GoldcapUserRepository goldcapUserRepository) {
         this.goldcapUserRepository = goldcapUserRepository;
@@ -84,5 +89,26 @@ public class GoldcapUserServiceImpl implements GoldcapUserService {
     @Override
     public GoldcapUser findByEmail(String email) {
         return goldcapUserRepository.findByEmail(email);
+    }
+
+    @Override
+    public GoldcapUser saveVerifiedUser(GoldcapUser goldcapUser) {
+        return goldcapUserRepository.save(goldcapUser);
+    }
+
+    //TODO napraviti u service interfacu
+    @Override
+    public GoldcapUser getUserByToken(String verificationToken) {
+        GoldcapUser user = tokenRepository.findByToken(verificationToken).getUser();
+        return user;
+    }
+    @Override
+    public VerificationToken getVerificationToken(String VerificationToken) {
+        return tokenRepository.findByToken(VerificationToken);
+    }
+    @Override
+    public void createVerificationToken(GoldcapUser user, String token) {
+        VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
     }
 }

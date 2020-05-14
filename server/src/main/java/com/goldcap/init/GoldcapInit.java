@@ -41,7 +41,7 @@ public class GoldcapInit {
     @Value("${admin.username}")
     String adminUserName;
     @Value("${admin.password}")
-    String adminPasword;
+    String adminPassword;
     @Value("${admin.email}")
     String adminEmail;
     @Value("${goldcap.roles}")
@@ -71,8 +71,9 @@ public class GoldcapInit {
             admin.setFirstName("Milos");
             admin.setLastName("Cuic");
             admin.setUsername(adminUserName);
-            admin.setPassword(bCryptPasswordEncoder.encode(adminPasword));
+            admin.setPassword(bCryptPasswordEncoder.encode(adminPassword));
             admin.setEmail(adminEmail);
+            admin.setVerified(true);
 
             userRepository.save(admin);
             logger.info("Admin saved......");

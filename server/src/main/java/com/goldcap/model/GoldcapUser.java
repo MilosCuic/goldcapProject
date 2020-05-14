@@ -44,8 +44,14 @@ public class GoldcapUser implements UserDetails {
     @JsonIgnore
     private List<Order> orders;
 
+    //TODO Switch to SET<ROLE> , REMOVE ROLL OR ADD ROLE TO USER
     @ManyToMany(cascade = CascadeType.ALL  , fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @Column(name = "enabled")
+    private boolean verified = false;
+
+
 
     public void addRole(Role role){
         if(!roles.contains(role)){
@@ -61,6 +67,7 @@ public class GoldcapUser implements UserDetails {
     * */
 
     //TODO add roles
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

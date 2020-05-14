@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -17,6 +19,8 @@ public class Role {
     private Long id;
 
     @Column(unique = true)
+    @NotBlank(message = "Role can be blank")
+    @NotNull(message = "Role name cant be null")
     private String name;
 
     @ManyToMany(mappedBy = "roles" , fetch = FetchType.LAZY)

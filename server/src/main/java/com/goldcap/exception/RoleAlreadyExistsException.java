@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class EmailAlreadyTakenException extends RuntimeException {
+public class RoleAlreadyExistsException extends RuntimeException{
 
-    private String email;
+    private String role;
 
-    public EmailAlreadyTakenException(String message){
-       this.email = message;
+    public RoleAlreadyExistsException(String role) {
+        this.role = role;
     }
 }

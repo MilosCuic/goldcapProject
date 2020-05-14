@@ -13,13 +13,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
+import static com.goldcap.util.Constants.*;
+
 @RestController
 @RequestMapping("/realms")
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
+@RolesAllowed({ ROLE_ADMIN, ROLE_SUPER_ADMIN, ROLE_SELLER})
 public class RealmController {
 
     private static final Logger logger = LoggerFactory.getLogger(RealmController.class);

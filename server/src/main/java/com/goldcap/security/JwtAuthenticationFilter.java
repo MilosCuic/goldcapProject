@@ -56,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authorities.add(authority);
             }
 
-
             UsernamePasswordAuthenticationToken auth  = new UsernamePasswordAuthenticationToken(
                     userDetails , null , authorities);
 
@@ -66,6 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         }catch (Exception e){
+            System.out.println("Puko sam u auth filteru");
             e.printStackTrace();
         }
 
@@ -80,6 +80,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)){
             return bearerToken.substring(7 , bearerToken.length());
         }else{
+            System.out.println("kurac nema tokena");
             return null;
         }
     }

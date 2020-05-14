@@ -1,6 +1,7 @@
 package com.goldcap.service;
 
 import com.goldcap.model.GoldcapUser;
+import com.goldcap.model.VerificationToken;
 import com.goldcap.web.dto.RegisterGoldcapUserDTO;
 import org.springframework.data.domain.Page;
 
@@ -15,5 +16,12 @@ public interface GoldcapUserService {
     public List<GoldcapUser> findAll();
     public GoldcapUser findByUsername(String username);
     public GoldcapUser findByEmail(String email);
+    public GoldcapUser saveVerifiedUser(GoldcapUser goldcapUser);
+
+    void createVerificationToken(GoldcapUser user, String token);
+
+    VerificationToken getVerificationToken(String VerificationToken);
+
+    public GoldcapUser getUserByToken(String verificationToken);
 
 }

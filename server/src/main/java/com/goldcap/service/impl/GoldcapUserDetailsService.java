@@ -34,7 +34,9 @@ public class GoldcapUserDetailsService implements UserDetailsService {
     public GoldcapUser loadGoldcapUserById(Long id) {
         GoldcapUser user = userRepository.getById(id);
         if (user == null)  throw new UsernameNotFoundException("User not found");
-
+        System.out.println(user.getEmail());
+        System.out.println(user.getUsername());
+        System.out.println(user.isVerified());
         return user;
     }
 }

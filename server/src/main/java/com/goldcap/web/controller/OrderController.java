@@ -1,6 +1,7 @@
 package com.goldcap.web.controller;
 
 import com.goldcap.converter.OrderToOrderDTO;
+import com.goldcap.exception.ForbiddenException;
 import com.goldcap.model.Order;
 import com.goldcap.service.OrderService;
 import com.goldcap.service.impl.MapValidationErrorService;
@@ -61,7 +62,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id){
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id , Principal principal){
 
         if (orderService.getById(id) == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -69,20 +70,32 @@ public class OrderController {
 
         Order order = orderService.getById(id);
 
+        if (!order.getGoldcapUser().getUsername().equals(principal.getName())){
+            throw new ForbiddenException("You can't access this resource");
+        }
+
         return new ResponseEntity<>(
                 orderToOrderDTO.convert(order),
                 HttpStatus.OK);
     }
 
     @PostMapping(value = "/{id}")
-    public ResponseEntity<OrderDTO> editOrder(@PathVariable Long id , @RequestBody SaveOrderDTO saveOrderDTO){
+    public ResponseEntity<OrderDTO> editOrder(@PathVariable Long id ,
+                                              @RequestBody SaveOrderDTO saveOrderDTO ,
+                                              Principal principal){
 
         if (saveOrderDTO.getId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(orderService.getById(id) == null || !id.equals(saveOrderDTO.getId())){
+        Order orderFound = orderService.getById(id);
+
+        if(orderFound == null || !id.equals(saveOrderDTO.getId())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (!orderFound.getGoldcapUser().getUsername().equals(principal.getName())){
+            throw new ForbiddenException("You can't access this resource");
         }
 
         Order order = orderService.saveOrder(saveOrderDTO);
@@ -92,6 +105,7 @@ public class OrderController {
                 HttpStatus.OK);
     }
 
+    @RolesAllowed({ ROLE_ADMIN, ROLE_SUPER_ADMIN})
     @DeleteMapping(value="/{id}")
     ResponseEntity<?> delete(@PathVariable Long id){
 
@@ -119,7 +133,6 @@ public class OrderController {
 
         Page<Order> orderPage = null;
 
-        //TODO staviti principal logovanog umesto username
         orderPage = orderService.searchOrders(buyerName, realmName, goldAmount  , price , principal.getName() ,  pageNum , pageSize , field , direction);
 
         HttpHeaders responseHeaders = new HttpHeaders();

@@ -48,7 +48,6 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = toOrder.convert(saveOrderDTO);
 
-
         assert order != null;
         return orderRepository.save(order);
     }

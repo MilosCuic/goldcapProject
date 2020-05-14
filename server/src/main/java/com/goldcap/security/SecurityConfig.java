@@ -79,6 +79,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                ).permitAll()
                .antMatchers(SIGN_UP_URLS).permitAll()
                .antMatchers(SIGN_IN_URL).permitAll()
+               .antMatchers("/register/registrationConfirm").permitAll()
                .anyRequest().authenticated();
     }
 }

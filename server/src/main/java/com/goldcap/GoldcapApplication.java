@@ -1,8 +1,5 @@
 package com.goldcap;
 
-import com.goldcap.model.GoldcapUser;
-import com.goldcap.repository.GoldcapUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

@@ -30,20 +30,10 @@ public class GoldcapUserValidator implements Validator {
 //            $                 # end-of-string
 
 
-
     @Override
     public void validate(Object target, Errors errors) {
 
         RegisterGoldcapUserDTO user = (RegisterGoldcapUserDTO) target;
-
-        if (goldcapUserService.findByEmail(user.getEmail()) != null) {
-            errors.rejectValue("email" , "Already taken" ,
-                    "Email already taken");
-        }
-        if (goldcapUserService.findByUsername(user.getUsername()) != null) {
-            errors.rejectValue("username" , "Already taken" ,
-                    "Username already taken");
-        }
 
         if (!user.getPassword().matches(passwordPattern)){
             errors.rejectValue("password" , "Match" , "Password needs   to contain " +
